@@ -1,0 +1,38 @@
+#************************************************
+#This file used for storing input data from user!
+#************************************************
+Milad
+i want to save my words in a file
+please help me
+now can read all data
+how are you?
+my name is milad
+hi
+this is correct
+Mila
+Hi I am in Novin Company
+Hiiiiiiii
+Todaty is Satuarday
+sdfdfsd
+jkfdfndfd
+hello from JWT Token
+hello from JWT Token
+hello from JWT Token
+hello from JWT Token
+hello from JWT Token
+hello from JWT Token
+Hiii
+Novin Comapny
+Novin Comapny
+Novin Comapny
+Novin Comapny
+ Hi from Postman
+Hi from Postman
+Now We have db
+Now We have db
+Now We have db
+Now We have db
+Now We have db
+Now We have db
+Now We have db
+Edit Files
