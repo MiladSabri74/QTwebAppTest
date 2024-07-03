@@ -4,7 +4,9 @@
 #include "global.h"
 #include "databasehandler.h"
 #include "jwthandler.h"
-
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 MainController::MainController(QObject* parent)
     : HttpRequestHandler(parent) {
     //
@@ -23,6 +25,12 @@ void MainController::service(HttpRequest &request, HttpResponse &response) {
     if(!JWT::checkJsonValidation(request.getBody(),"inputLine",&inputLine))
     {
         //if is not valid send bad status to requester
+        QJsonObject responseObj;
+        responseObj["status"] = QString::fromStdString("failure");
+        responseObj["message"] = QString::fromStdString("JSON Format was incorrect");
+
+        QJsonDocument responseDoc(responseObj);
+        response.write(responseDoc.toJson(),true);
         response.setStatus(HTTP_STATUS_BAD_REQUEST,HTTP_STATUS_BAD_REQUEST_DESCRIPTION);
         return;
     }
@@ -37,9 +45,25 @@ void MainController::service(HttpRequest &request, HttpResponse &response) {
         if(file.write(inputLine.toUtf8()+"\n"))
             qDebug("written Completed!");
         else
-            qDebug("Dont Write!");
+        {
+            qDebug("Don't Write!");
+            QJsonObject responseObj;
+            responseObj["status"] = QString::fromStdString("failure");
+            responseObj["message"] = QString::fromStdString("Can not write to file");
+
+            QJsonDocument responseDoc(responseObj);
+            response.write(responseDoc.toJson(),true);
+            response.setStatus(HTTP_STATUS_BAD_REQUEST,HTTP_STATUS_BAD_REQUEST_DESCRIPTION);
+            return;
+        }
     }
 
     //response OK
+    QJsonObject responseObj;
+    responseObj["status"] = QString::fromStdString("success");
+    responseObj["message"] = QString::fromStdString("Message recieved successfully");
+
+    QJsonDocument responseDoc(responseObj);
+    response.write(responseDoc.toJson(),true);
     response.setStatus(HTTP_STATUS_OK,HTTP_STATUS_OK_DESCRIPTION);
 }

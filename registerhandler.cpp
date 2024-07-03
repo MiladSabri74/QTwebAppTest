@@ -25,6 +25,7 @@ void RegisterHandler::service(HttpRequest &request, HttpResponse &response) {
     }
 
     qDebug() << "username:" <<username <<"\npassword:"<<password;
+    QJsonObject responseObj;
     // Check User valid in DB or not
     if (!Database::validateUser(username,password)) {
 
@@ -37,17 +38,26 @@ void RegisterHandler::service(HttpRequest &request, HttpResponse &response) {
         auto token = JWT::generateJWT(username);
 
         // Create JSON to send JWT Token to front-end
-        QJsonObject responseObj;
+
+        responseObj["status"] = QString::fromStdString("success");
+        responseObj["message"] = QString::fromStdString("User registered successfully");
         responseObj["token"] = QString::fromStdString(token.toStdString());
+
         QJsonDocument responseDoc(responseObj);
+
 
         // Send JSON
         response.setStatus(HTTP_STATUS_OK,HTTP_STATUS_OK_DESCRIPTION);
         response.write(responseDoc.toJson(),true);
     }
     else {
+        responseObj["status"] = QString::fromStdString("failure");
+        responseObj["message"] = QString::fromStdString("User dosn't registered");
+
+        QJsonDocument responseDoc(responseObj);
+
         // if user invalid set status = UNAUTHORIZED(401)
         response.setStatus(HTTP_STATUS_BAD_REQUEST,HTTP_STATUS_BAD_REQUEST_DESCRIPTION);
-        response.write("",true);
+        response.write(responseDoc.toJson(),true);
     }
 }

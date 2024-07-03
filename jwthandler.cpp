@@ -9,7 +9,7 @@
 #include <QDebug>
 
 
- bool JWT::checkTokenValidation(const QString &token)
+bool JWT::checkTokenValidation(const QString &token)
 {
     // Verify a JWT token
     auto decoded = jwt::decode(token.toStdString());
@@ -29,7 +29,7 @@
     return true;
 }
 
- QByteArray JWT::generateJWT(const QString& username) {
+QByteArray JWT::generateJWT(const QString& username) {
 
     const std::string SECRET_KEY = "NovinCompany";
     auto now = std::chrono::system_clock::now();
@@ -46,7 +46,7 @@
 }
 
 
- bool JWT::checkJsonValidation(const QByteArray& body,const QString& param1,QString* value1)
+bool JWT::checkJsonValidation(const QByteArray& body,const QString& param1,QString* value1)
 {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(body);
     if (!jsonDoc.isObject()) {
@@ -65,7 +65,7 @@
     return true;
 }
 
- bool JWT::checkJsonValidation(const QByteArray& body,const QString& param1,QString* value1,const QString& param2,QString* value2)
+bool JWT::checkJsonValidation(const QByteArray& body,const QString& param1,QString* value1,const QString& param2,QString* value2)
 {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(body);
     if (!jsonDoc.isObject()) {
