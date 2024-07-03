@@ -30,8 +30,8 @@ This project is a backend application for a web application, built using the Qt 
 
 1. Clone the repository:
     ```sh
-    git clone <repository_url>
-    cd <repository_directory>
+    git clone git@github.com:MiladSabri74/QTwebAppTest.git
+    cd QTwebAppTest
     ```
 
 2. Install dependencies:
@@ -64,4 +64,24 @@ This project is a backend application for a web application, built using the Qt 
 
 Run the compiled application:
 ```sh
-./your_application_name
+./QTwebAppTest
+```
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any changes or enhancements.
+
+## Acknowledgements
+
+    Qt Framework
+    QtWebApp Library
+    jwt-cpp Library
+    PostgreSQL
+
+## Contact
+
+For any inquiries or questions, please contact milad sabri at milad.sabri74@gmail.com
+  
