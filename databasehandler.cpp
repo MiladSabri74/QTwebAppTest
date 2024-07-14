@@ -1,5 +1,4 @@
 #include "databasehandler.h"
-#include <QDebug>
 
 void Database::initializeDatabase() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");

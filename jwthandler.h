@@ -1,7 +1,6 @@
 #ifndef JWTHANDLER_H
 #define JWTHANDLER_H
 
-#include <QString>
 
 class JWT {
 public:

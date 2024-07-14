@@ -1,7 +1,4 @@
-#include "global.h"
-#include <QString>
+#include "staticfilecontroller.h"
 
 //HttpSessionStore* sessionStore;
 StaticFileController* staticFileController;
-bool isLogin;
-//QString* user;

@@ -1,7 +1,6 @@
-#include "requestmapper.h"
-#include "global.h"
 
 #include "databasehandler.h"
+#include "requestmapper.h"
 #include "jwthandler.h"
 
 RequestMapper::RequestMapper(QObject* parent)

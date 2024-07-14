@@ -1,12 +1,8 @@
-#include "registerhandler.h"
-#include "global.h"
-
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonValue>
 
 #include "databasehandler.h"
+#include "registerhandler.h"
 #include "jwthandler.h"
+
 RegisterHandler::RegisterHandler(QObject *parent)
     : HttpRequestHandler(parent) {
     //

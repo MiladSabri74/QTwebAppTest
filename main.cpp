@@ -3,8 +3,6 @@
 #include <QSettings>
 #include <QFile>
 #include <QDir>
-#include <QDebug>
-#include "global.h"
 
 #include <jwt-cpp/jwt.h>
 

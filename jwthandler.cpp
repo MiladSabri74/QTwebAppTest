@@ -1,12 +1,9 @@
-#include "jwthandler.h"
+#include <chrono>
+
 #include "databasehandler.h"
 
 #include <jwt-cpp/jwt.h>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonValue>
-#include <chrono>
-#include <QDebug>
+#include "jwthandler.h"
 
 
 bool JWT::checkTokenValidation(const QString &token)

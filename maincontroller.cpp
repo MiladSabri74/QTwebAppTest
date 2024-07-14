@@ -1,12 +1,7 @@
-#include "maincontroller.h"
-#include <QDebug>
-
-#include "global.h"
 #include "databasehandler.h"
+#include "maincontroller.h"
 #include "jwthandler.h"
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonValue>
+
 MainController::MainController(QObject* parent)
     : HttpRequestHandler(parent) {
     //

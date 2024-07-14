@@ -1,11 +1,6 @@
 #ifndef DATABASEHANDLER_H
 #define DATABASEHANDLER_H
 
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QSqlRecord>
-
 
 class Database {
 public:

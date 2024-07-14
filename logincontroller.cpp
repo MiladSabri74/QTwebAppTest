@@ -1,12 +1,6 @@
-#include "logincontroller.h"
-#include <QTime>
-#include "global.h"
-
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonValue>
 
 #include "databasehandler.h"
+#include "logincontroller.h"
 #include "jwthandler.h"
 
 loginController::loginController(QObject* parent)
