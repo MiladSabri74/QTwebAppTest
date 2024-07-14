@@ -2,7 +2,8 @@
 #include "databasehandler.h"
 #include "requestmapper.h"
 #include "jwthandler.h"
-#include "global.h"
+//#include "global.h"
+#include "filecontroller.h"
 
 RequestMapper::RequestMapper(QObject* parent)
     : HttpRequestHandler(parent) {
@@ -34,7 +35,9 @@ void RequestMapper::service(HttpRequest &request, HttpResponse &response) {
 
         // Send Response OK
         response.setStatus(HTTP_STATUS_OK,HTTP_STATUS_OK_DESCRIPTION);
-        staticFileController->service(request,response);
+        fileController fc;
+        fc.getFileHandler()->service(request,response);
+       // staticFileController->service(request,response);
 
     }
     else {

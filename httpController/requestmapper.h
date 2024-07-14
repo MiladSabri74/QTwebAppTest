@@ -6,7 +6,7 @@
 
 #include "maincontroller.h"
 #include "logincontroller.h"
-#include "registerhandler.h"
+#include "registercontroller.h"
 
 using namespace QTWebApp;
 
@@ -20,7 +20,7 @@ public:
 private:
     MainController samplePage;
     loginController testPage;
-    RegisterHandler registerPage;
+    RegisterController registerPage;
 };
 
 #endif // REQUESTMAPPER_H

@@ -9,10 +9,14 @@
 // libraires from QTWebApp
 #include "httplistener.h"
 #include "httprequesthandler.h"
+
 // Custom files
 #include "requestmapper.h"
 #include "databasehandler.h"
-#include "global.h"
+//#include "global.h"
+
+//
+#include "filecontroller.h"
 
 using namespace QTWebApp;
 /*
@@ -41,7 +45,7 @@ QString searchConfigFile(QString settingFile) {
         {
             // The method QDir::canonicalPath() converts relative path names to the absolute form
             fileName=QDir(file.fileName()).canonicalPath();
-            qDebug("Using config file %s",qPrintable(fileName));
+            qDebug("CONFIG: Using config file %s",qPrintable(fileName));
             return fileName;
         }
     }
@@ -49,9 +53,9 @@ QString searchConfigFile(QString settingFile) {
     // not found
     foreach (QString dir, searchList)
     {
-        qWarning("%s/%s not found",qPrintable(dir),qPrintable(fileName));
+        qWarning("CONFIG: %s/%s not found",qPrintable(dir),qPrintable(fileName));
     }
-    qFatal("Cannot find config file %s",qPrintable(fileName));
+    qFatal("CONFIG: Cannot find config file %s",qPrintable(fileName));
     return nullptr;
 }
 
@@ -61,12 +65,19 @@ int main(int argc, char *argv[])
     QCoreApplication app(argc, argv);
 
 
-
     // Find setting file and load it to listenerSettings object(if can not find crashed!)
     QString configFileName = searchConfigFile("webapp1.ini");
+    qInfo("CONFIG: config file loaded\n");
 
-    QSettings* listenerSettings = new QSettings(configFileName,QSettings::IniFormat,&app);
-    qDebug("config file loaded");
+
+    // Static file controller
+    QSettings* fileSettings = new QSettings(configFileName,QSettings::IniFormat,&app);
+    fileSettings->beginGroup("files");
+
+    fileController fileHandler;
+    fileHandler.setFileHandler(new StaticFileController(fileSettings,&app));
+
+    qInfo("StaticFileController: File handler service is run now ...\n");
 
 
     Database::initializeDatabase();
@@ -77,15 +88,13 @@ int main(int argc, char *argv[])
     //    sessionSettings->beginGroup("sessions");
     //    sessionStore=new HttpSessionStore(sessionSettings,&app);
 
-    // Static file controller
-    QSettings* fileSettings=new QSettings(configFileName,QSettings::IniFormat,&app);
-    fileSettings->beginGroup("files");
-    staticFileController=new StaticFileController(fileSettings,&app);
 
-    // load group listener
-    listenerSettings->beginGroup("listener");
 
     // Start the HTTP server
+
+    QSettings* listenerSettings = new QSettings(configFileName,QSettings::IniFormat,&app);
+    listenerSettings->beginGroup("listener");
+
     new QTWebApp::HttpListener(listenerSettings, new RequestMapper(&app), &app);
 
     return app.exec();

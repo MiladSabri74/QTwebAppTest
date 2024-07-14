@@ -1,7 +1,6 @@
 #ifndef QTHEADERS_H
 #define QTHEADERS_H
 
-//#include "global.h"
 #include "definition.h"
 
 #include <QDebug>
@@ -9,6 +8,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
+
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <QSqlDatabase>
 #include <QSqlError>

@@ -15,11 +15,13 @@ HEADERS +=\
 	 $$PWD/requestmapper.h \
   	 $$PWD/logincontroller.h \
   	 $$PWD/maincontroller.h \
-	 $$PWD/registerhandler.h
+         $$PWD/registercontroller.h\
+         $$PWD/filecontroller.h
 
 SOURCES += \
          $$PWD/requestmapper.cpp\
          $$PWD/logincontroller.cpp\
          $$PWD/maincontroller.cpp \
-         $$PWD/registerhandler.cpp
+         $$PWD/registercontroller.cpp \
+         $$PWD/filecontroller.cpp
 

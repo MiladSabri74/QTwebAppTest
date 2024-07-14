@@ -34,7 +34,7 @@ INCLUDEPATH += /usr/include/openssl
 LIBS += -L/usr/lib -lssl -lcrypto
 
 # Define Precompiled header
-PRECOMPILED_HEADER = qtheaders.h
+PRECOMPILED_HEADER = predefinedheaders.h
 
 
 OTHER_FILES += etc/webapp1.ini
@@ -45,18 +45,19 @@ SOURCES += main.cpp \
     databasehandler.cpp \
     jwthandler.cpp \
     #requestmapper.cpp \
-    global.cpp \
+    #global.cpp \
     #registerhandler.cpp
+   # filecontroller.cpp
 
 HEADERS += \
     #requestmapper.h \
     #logincontroller.h \
     #maincontroller.h \
-    global.h \
     databasehandler.h \
     jwthandler.h \
     #registerhandler.h \
-    qtheaders.h \
-    definition.h
+    definition.h \
+    predefinedheaders.h \
+    #filecontroller.h
 
 

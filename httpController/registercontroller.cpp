@@ -1,15 +1,15 @@
 
 #include "databasehandler.h"
-#include "registerhandler.h"
+#include "registercontroller.h"
 #include "jwthandler.h"
 
-RegisterHandler::RegisterHandler(QObject *parent)
+RegisterController::RegisterController(QObject *parent)
     : HttpRequestHandler(parent) {
     //
 }
 
 
-void RegisterHandler::service(HttpRequest &request, HttpResponse &response) {
+void RegisterController::service(HttpRequest &request, HttpResponse &response) {
 
     QString username,password;
 
