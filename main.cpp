@@ -12,7 +12,7 @@
 // Custom files
 #include "requestmapper.h"
 #include "databasehandler.h"
-
+#include "global.h"
 
 using namespace QTWebApp;
 /*

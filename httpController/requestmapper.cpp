@@ -2,6 +2,7 @@
 #include "databasehandler.h"
 #include "requestmapper.h"
 #include "jwthandler.h"
+#include "global.h"
 
 RequestMapper::RequestMapper(QObject* parent)
     : HttpRequestHandler(parent) {

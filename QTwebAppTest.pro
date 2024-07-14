@@ -18,7 +18,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 #include(../QtWebApp/QtWebApp/httpserver/httpserver.pri)
-include($$PWD/QtWebApp/QtWebApp/httpserver/httpserver.pri)
+#include($$PWD/QtWebApp/QtWebApp/httpserver/httpserver.pri)
+
+include($$PWD/httpController/httpController.pri)
 
 #JWT
 
@@ -38,22 +40,23 @@ PRECOMPILED_HEADER = qtheaders.h
 OTHER_FILES += etc/webapp1.ini
 
 SOURCES += main.cpp \
-    logincontroller.cpp \
-    maincontroller.cpp \
+    #logincontroller.cpp \
+    #maincontroller.cpp \
     databasehandler.cpp \
     jwthandler.cpp \
-    requestmapper.cpp \
+    #requestmapper.cpp \
     global.cpp \
-    registerhandler.cpp
+    #registerhandler.cpp
 
 HEADERS += \
-    requestmapper.h \
-    logincontroller.h \
-    maincontroller.h \
+    #requestmapper.h \
+    #logincontroller.h \
+    #maincontroller.h \
     global.h \
     databasehandler.h \
     jwthandler.h \
-    registerhandler.h \
-    qtheaders.h
+    #registerhandler.h \
+    qtheaders.h \
+    definition.h
 
 

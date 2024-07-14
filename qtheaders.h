@@ -1,7 +1,8 @@
 #ifndef QTHEADERS_H
 #define QTHEADERS_H
 
-#include "global.h"
+//#include "global.h"
+#include "definition.h"
 
 #include <QDebug>
 
