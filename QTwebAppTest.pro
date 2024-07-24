@@ -43,7 +43,6 @@ SOURCES += main.cpp \
     #logincontroller.cpp \
     #maincontroller.cpp \
     databasehandler.cpp \
-    jwthandler.cpp \
     #requestmapper.cpp \
     #global.cpp \
     #registerhandler.cpp
@@ -54,7 +53,6 @@ HEADERS += \
     #logincontroller.h \
     #maincontroller.h \
     databasehandler.h \
-    jwthandler.h \
     #registerhandler.h \
     definition.h \
     predefinedheaders.h \

@@ -4,6 +4,9 @@
 #include <QObject>
 #include "httprequesthandler.h"
 
+#define NO_ERROR                0
+#define ERROR_JSON              1
+#define ERROR_USER_NOT_EXIST    2
 
 using namespace QTWebApp;
 

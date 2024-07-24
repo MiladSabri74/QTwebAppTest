@@ -1,4 +1,5 @@
 #include "databasehandler.h"
+#include <QString>
 
 void Database::initializeDatabase() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
@@ -16,10 +17,12 @@ void Database::initializeDatabase() {
 
 
 
-bool Database::validateUser(const QString& username, const QString& password) {
+bool Database::validateUser(const QString& username, const QString& password,int* userAccessLevel) {
     QSqlQuery query;
-    query.prepare("SELECT password FROM users WHERE username = :username");
+    QString accessLevel = "";
+    query.prepare("SELECT access_level,password FROM users WHERE username = :username");
     query.bindValue(":username", username);
+
 
     if (!query.exec()) {
         qDebug() << "Database query failed:" << query.lastError();
@@ -27,32 +30,50 @@ bool Database::validateUser(const QString& username, const QString& password) {
     }
 
     if (query.next()) {
-        QString storedPassword = query.value(0).toString();
+        accessLevel = query.value(0).toString();
+        qDebug() << "ACCESS-LEVEL-DB: " << accessLevel;
+        *userAccessLevel = accessLevel.toInt();
+        QString storedPassword = query.value(1).toString();
         return storedPassword == password;
     }
 
     return false;
 }
 
-bool Database::checkExistanceUser(const QString& username) {
+bool Database::checkExistanceUser(const QString& username,int tokenAccessLevel) {
+    // define variables
     QSqlQuery query;
-    query.prepare("SELECT * FROM users WHERE username = :username");
+    int databaseAccessLevel = 0;
+    bool isValid = false;
+
+    // create query
+    query.prepare("SELECT access_level FROM users WHERE username = :username");
     query.bindValue(":username", username);
 
+    // execute query
     if (!query.exec()) {
         qDebug() << "Database query failed:" << query.lastError();
         return false;
     }
 
-    return true;
+    // extract parameters from databases
+    if (query.next()) {
+        databaseAccessLevel = query.value(0).toString().toInt(&isValid,10);
+        // check validation of access-level
+        if(isValid && databaseAccessLevel <= MAX_ACCESS_LEVEL && tokenAccessLevel==databaseAccessLevel) {
+            qDebug() << "ACCESS-LEVEL-DB: " << databaseAccessLevel;
+            return true;
+        }
+    }
+    return false;
 }
 
 bool Database::addUser(const QString& username, const QString& password) {
     QSqlQuery query;
-    query.prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
+    query.prepare("INSERT INTO users (username, password,access_level) VALUES (:username, :password,:access_level)");
     query.bindValue(":username", username);
     query.bindValue(":password", password);
-
+    query.bindValue(":access_level", ACCESS_LEVEL_USERS);
     if (!query.exec()) {
         qDebug() << "Add user failed:" << query.lastError();
         return false;

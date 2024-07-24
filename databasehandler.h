@@ -10,9 +10,9 @@ public:
 
     // -------------------------- user table ----------------------------------
     // Authentication
-    static bool validateUser(const QString& username, const QString& password);
+    static bool validateUser(const QString& username, const QString& password,int* userAccessLevel);
 
-    static bool checkExistanceUser(const QString& username);
+    static bool checkExistanceUser(const QString& username,int tokenAccessLevel);
 
     static bool addUser(const QString& username, const QString& password);
 

@@ -3,6 +3,8 @@
 
 #include "definition.h"
 
+#include <jwt-cpp/jwt.h>
+
 #include <QDebug>
 
 #include <QJsonDocument>

@@ -1,7 +1,9 @@
 
 #include "databasehandler.h"
 #include "registercontroller.h"
-#include "jwthandler.h"
+
+bool getJSONParameter(QJsonDocument jsonDoc,const QString& key,QString* value);
+QByteArray generateJWT(const QString& username,int accessLevel);
 
 RegisterController::RegisterController(QObject *parent)
     : HttpRequestHandler(parent) {
@@ -11,49 +13,87 @@ RegisterController::RegisterController(QObject *parent)
 
 void RegisterController::service(HttpRequest &request, HttpResponse &response) {
 
+    // define variables
     QString username,password;
+    int userAccessLevel = ACCESS_LEVEL_ALL;
 
-    // check validation of JSON Format
-    if(!JWT::checkJsonValidation(request.getBody(),"username",&username,"password",&password)){
-        //if is not valid send bad status to requester
-        response.setStatus(HTTP_STATUS_BAD_REQUEST,HTTP_STATUS_BAD_REQUEST_DESCRIPTION);
-        return;
-    }
-
-    qDebug() << "username:" <<username <<"\npassword:"<<password;
     QJsonObject responseObj;
-    // Check User valid in DB or not
-    if (!Database::validateUser(username,password)) {
+    int validationErrorCode = NO_ERROR;
 
-        if (!Database::addUser(username,password))
-        {
-            response.setStatus(HTTP_STATUS_BAD_REQUEST,HTTP_STATUS_BAD_REQUEST_DESCRIPTION);
-            response.write("",true);
-            return;
+    // read JSON
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(request.getBody());
+
+    // read parameters(username and password)
+    if (!getJSONParameter(jsonDoc,JSON_KEY_USERNAME,&username) || !getJSONParameter(jsonDoc,JSON_KEY_PASSWORD,&password)){
+        validationErrorCode = ERROR_JSON;
+    }
+    else{
+        // check info from db and return user access level
+        if(!Database::checkExistanceUser(username,1)){
+            if (!Database::addUser(username,password))
+            {
+                validationErrorCode = ERROR_DB;
+            }
         }
-        auto token = JWT::generateJWT(username);
+        else{
+            validationErrorCode = ERROR_USER_EXIST;
+        }
+    }
 
-        // Create JSON to send JWT Token to front-end
+    // prepare response to send
+    switch (validationErrorCode) {
+    // NO ERROR
+    case NO_ERROR:{
+        //generate token
+        //use username as subject and userAccessLevel in payload-claim dedicated via ("access-level")
+        auto token = generateJWT(username,userAccessLevel);
 
-        responseObj["status"] = QString::fromStdString("success");
-        responseObj["message"] = QString::fromStdString("User registered successfully");
-        responseObj["token"] = QString::fromStdString(token.toStdString());
+        //create JSON parameters
+        responseObj[JSON_KEY_STATUS] = QString::fromStdString(JSON_VALUE_STATUS_OK);
+        responseObj[JSON_KEY_MESSAGE] = QString::fromStdString("User registered successfully");
+        responseObj[JSON_KEY_TOKEN] = QString::fromStdString(token.toStdString());
 
-        QJsonDocument responseDoc(responseObj);
-
-
-        // Send JSON
+        //set status of response
         response.setStatus(HTTP_STATUS_OK,HTTP_STATUS_OK_DESCRIPTION);
-        response.write(responseDoc.toJson(),true);
+        break;
     }
-    else {
-        responseObj["status"] = QString::fromStdString("failure");
-        responseObj["message"] = QString::fromStdString("User dosn't registered");
+    // invalid json parameter
+    case ERROR_JSON:
+        //create JSON parameters
+        responseObj[JSON_KEY_STATUS] = QString::fromStdString(JSON_VALUE_STATUS_FAIL);
+        responseObj[JSON_KEY_MESSAGE] = JSON_MESSAGE_REPORT_ERROR_CODE +
+                                        QString::number(JSON_ERROR_CODE_INVALID_PARAMETER);
 
-        QJsonDocument responseDoc(responseObj);
-
-        // if user invalid set status = UNAUTHORIZED(401)
+        //set status of response
         response.setStatus(HTTP_STATUS_BAD_REQUEST,HTTP_STATUS_BAD_REQUEST_DESCRIPTION);
-        response.write(responseDoc.toJson(),true);
+        break;
+
+    // can not add user into db
+    case ERROR_DB:
+        //create JSON parameters
+        responseObj[JSON_KEY_STATUS] = QString::fromStdString(JSON_VALUE_STATUS_FAIL);
+        responseObj[JSON_KEY_MESSAGE] = JSON_MESSAGE_REPORT_ERROR_CODE +
+                                        QString::number(JSON_ERROR_CODE_REGISTER_DATABASE);
+
+        //set status of response
+        response.setStatus(HTTP_STATUS_BAD_REQUEST,HTTP_STATUS_BAD_REQUEST_DESCRIPTION);
+
+    // user eexist in db
+    case ERROR_USER_EXIST:
+        //create JSON parameters
+        responseObj[JSON_KEY_STATUS] = QString::fromStdString(JSON_VALUE_STATUS_FAIL);
+        responseObj[JSON_KEY_MESSAGE] = JSON_MESSAGE_REPORT_ERROR_CODE +
+                                        QString::number(JSON_ERROR_CODE_EXIST_USER_DB);
+
+        //set status of response
+        response.setStatus(HTTP_STATUS_BAD_REQUEST,HTTP_STATUS_BAD_REQUEST_DESCRIPTION);
+    default:
+        break;
     }
+
+    //send JSON document as response
+    QJsonDocument responseDoc(responseObj);
+    response.write(responseDoc.toJson(),true);
 }
+
+

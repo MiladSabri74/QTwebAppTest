@@ -21,6 +21,17 @@ private:
     MainController samplePage;
     loginController testPage;
     RegisterController registerPage;
+
+    bool isJSON(const QByteArray& input);
+
+    bool isTokenExist(const QByteArray& tokenJWT);
+    bool isTokenValid(const QByteArray& tokenJWT,QString* username,int* userAccessLevel);
+    void decodeToken(bool& isValid,const QByteArray& decoded);
+
+    int minAllowedAccessLevel(const QByteArray& path);
+
+    int readAccessLevel(const QByteArray& input);
+    void sendShortResponse(HttpResponse &response,int status);
 };
 
 #endif // REQUESTMAPPER_H
